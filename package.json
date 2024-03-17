@@ -17,7 +17,9 @@
 	"scripts": {
 		"lint": "eslint . --ext .js,.cjs,.mjs,.ts,.cts,.mts --max-warnings 0",
 		"lint:fix": "pnpm lint --fix",
-		"prebuild": "tsc && pnpm lint",
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
+		"prebuild": "tsc && pnpm lint && pnpm format:check",
 		"build": "unbuild",
 		"postbuild": "publint",
 		"prepublish": "pnpm build"
@@ -67,6 +69,7 @@
 		"@typescript-eslint/parser": "^7.2.0",
 		"eslint": "^8.57.0",
 		"eslint-plugin-simple-import-sort": "^12.0.0",
+		"prettier": "3.2.5",
 		"publint": "^0.2.7",
 		"typescript": "~5.4.2",
 		"unbuild": "^2.0.0"

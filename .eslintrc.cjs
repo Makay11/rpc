@@ -30,9 +30,12 @@ module.exports = {
 		},
 	],
 
+	reportUnusedDisableDirectives: true,
+
 	rules: {
 		// ESLint rules
 		eqeqeq: ["error", "smart"],
+		// "no-undef": "error",
 		"no-useless-concat": "warn",
 		"object-shorthand": "warn",
 		"prefer-destructuring": ["warn", { array: false, object: true }],

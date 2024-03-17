@@ -6,7 +6,7 @@ export * from "zod"
 
 export function zv<Schema extends z.ZodTypeAny>(
 	arg: unknown,
-	schema: Schema
+	schema: Schema,
 ): asserts arg is z.infer<Schema> {
 	const result = schema.safeParse(arg)
 
