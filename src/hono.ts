@@ -28,7 +28,7 @@ export async function createRpc({
 			_createContext(await createContext(c))
 		}
 
-		const body = await c.req.json()
+		const body: unknown = await c.req.json()
 
 		try {
 			return c.json(await rpc(body))

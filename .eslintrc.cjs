@@ -5,7 +5,7 @@ module.exports = {
 
 	extends: [
 		"eslint:recommended",
-		"plugin:@typescript-eslint/recommended",
+		"plugin:@typescript-eslint/strict-type-checked",
 		"prettier",
 	],
 
@@ -14,6 +14,8 @@ module.exports = {
 	parserOptions: {
 		ecmaVersion: "latest",
 		sourceType: "module",
+		project: true,
+		tsconfigRootDir: __dirname,
 	},
 
 	env: {
@@ -53,5 +55,7 @@ module.exports = {
 
 		// Typescript rules
 		"@typescript-eslint/no-non-null-assertion": "off",
+		"@typescript-eslint/strict-boolean-expressions": "warn",
+		"@typescript-eslint/switch-exhaustiveness-check": "warn",
 	},
 }

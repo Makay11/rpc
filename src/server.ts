@@ -28,13 +28,13 @@ export async function createRpc({
 	for await (const path of paths) {
 		const absolutePath = resolve(process.cwd(), path)
 
-		const module = await import(absolutePath)
+		const module = (await import(absolutePath)) as Record<string, Proc>
 
 		for (const _export in module) {
 			const procName = `${path}:${_export}`
 
-			procMap.set(procName, module[_export])
-			procMap.set(shortHash(procName), module[_export])
+			procMap.set(procName, module[_export]!)
+			procMap.set(shortHash(procName), module[_export]!)
 		}
 	}
 
