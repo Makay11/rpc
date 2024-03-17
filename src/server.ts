@@ -16,7 +16,7 @@ export class InvalidRequestBodyError extends Error {}
 export class UnknownProcedureError extends Error {}
 export class ValidationError extends Error {}
 
-export const RequestBodySchema = z.tuple([z.string(), z.array(z.unknown())])
+export const RequestBodySchema = z.tuple([z.string()]).rest(z.unknown())
 
 export async function createRpc({
 	patterns = "src/**/*.server.ts",
@@ -45,7 +45,7 @@ export async function createRpc({
 			throw new InvalidRequestBodyError()
 		}
 
-		const [procName, args] = bodyResult.data
+		const [procName, ...args] = bodyResult.data
 
 		const proc = procMap.get(procName)
 

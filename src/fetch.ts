@@ -16,7 +16,7 @@ export function rpc(proc: string) {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify([proc, args]),
+			body: JSON.stringify([proc, ...args]),
 		})
 
 		return res.json()
