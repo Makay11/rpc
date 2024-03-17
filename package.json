@@ -1,0 +1,16 @@
+{
+	"name": "@makay/rpc",
+	"version": "0.1.0",
+	"description": "",
+	"keywords": [
+		"RPC"
+	],
+	"license": "MPL-2.0",
+	"author": "Diogo Pais",
+	"repository": "github:Makay11/rpc",
+	"type": "module",
+	"engines": {
+		"node": ">=18"
+	},
+	"packageManager": "pnpm@8.15.4"
+}
