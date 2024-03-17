@@ -2,13 +2,13 @@ import type { Context as HonoContext } from "hono"
 import type { MiddlewareHandler } from "hono/types"
 
 import {
-	InvalidRequestBodyError,
-	UnknownProcedureError,
-	ValidationError,
+	type Context,
 	createContext as _createContext,
 	createRpc as _createRpc,
-	type Context,
+	InvalidRequestBodyError,
 	type Options as RpcOptions,
+	UnknownProcedureError,
+	ValidationError,
 } from "./server.js"
 
 export type MaybePromise<T> = T | Promise<T>

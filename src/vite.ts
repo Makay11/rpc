@@ -35,7 +35,7 @@ export function rpc({
 			projectRoot = config.root
 		},
 
-		async transform(code, id) {
+		transform(code, id) {
 			if (!filter(id)) return
 
 			const path = relative(projectRoot, id)
