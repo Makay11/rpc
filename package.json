@@ -1,6 +1,7 @@
 {
 	"name": "@makay/rpc",
 	"version": "0.1.0",
+	"private": true,
 	"description": "",
 	"keywords": [
 		"RPC"
