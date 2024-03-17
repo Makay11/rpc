@@ -3,7 +3,11 @@ module.exports = {
 
 	plugins: ["@typescript-eslint", "simple-import-sort"],
 
-	extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+	extends: [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/recommended",
+		"prettier",
+	],
 
 	parser: "@typescript-eslint/parser",
 
