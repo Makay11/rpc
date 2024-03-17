@@ -14,6 +14,40 @@
 		"node": ">=20"
 	},
 	"packageManager": "pnpm@8.15.4",
+	"scripts": {
+		"prebuild": "tsc",
+		"build": "unbuild",
+		"postbuild": "publint"
+	},
+	"files": [
+		"dist"
+	],
+	"exports": {
+		"./fetch": {
+			"types": "./dist/fetch.d.ts",
+			"import": "./dist/fetch.js"
+		},
+		"./hono": {
+			"types": "./dist/hono.d.ts",
+			"import": "./dist/hono.js"
+		},
+		"./result": {
+			"types": "./dist/result.d.ts",
+			"import": "./dist/result.js"
+		},
+		"./server": {
+			"types": "./dist/server.d.ts",
+			"import": "./dist/server.js"
+		},
+		"./vite": {
+			"types": "./dist/vite.d.ts",
+			"import": "./dist/vite.js"
+		},
+		"./zod": {
+			"types": "./dist/zod.d.ts",
+			"import": "./dist/zod.js"
+		}
+	},
 	"dependencies": {
 		"glob": "^10.3.10",
 		"hono": "^4.1.1",
@@ -26,6 +60,8 @@
 		"@tsconfig/node20": "^20.1.2",
 		"@tsconfig/strictest": "^2.0.3",
 		"@types/node": "^20.11.28",
-		"typescript": "~5.4.2"
+		"publint": "^0.2.7",
+		"typescript": "~5.4.2",
+		"unbuild": "^2.0.0"
 	}
 }

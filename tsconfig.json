@@ -4,6 +4,8 @@
 		"@tsconfig/strictest/tsconfig.json"
 	],
 
+	"include": ["*.ts", "src/**/*.ts"],
+
 	"compilerOptions": {
 		"noEmit": true,
 		"lib": ["DOM"]
