@@ -10,7 +10,21 @@
 	"repository": "github:Makay11/rpc",
 	"type": "module",
 	"engines": {
-		"node": ">=18"
+		"node": ">=20"
 	},
-	"packageManager": "pnpm@8.15.4"
+	"packageManager": "pnpm@8.15.4",
+	"dependencies": {
+		"glob": "^10.3.10",
+		"hono": "^4.1.1",
+		"itertools": "^2.2.5",
+		"ts-morph": "^22.0.0",
+		"vite": "^5.1.6",
+		"zod": "^3.22.4"
+	},
+	"devDependencies": {
+		"@tsconfig/node20": "^20.1.2",
+		"@tsconfig/strictest": "^2.0.3",
+		"@types/node": "^20.11.28",
+		"typescript": "~5.4.2"
+	}
 }
