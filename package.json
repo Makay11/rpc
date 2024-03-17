@@ -17,7 +17,8 @@
 	"scripts": {
 		"prebuild": "tsc",
 		"build": "unbuild",
-		"postbuild": "publint"
+		"postbuild": "publint",
+		"prepublish": "pnpm build"
 	},
 	"files": [
 		"dist"
