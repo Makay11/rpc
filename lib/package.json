@@ -22,7 +22,9 @@
 		"prebuild": "pnpm lint && pnpm format:check",
 		"build": "rm -rf dist/* && tsc -p tsconfig.lib.json",
 		"postbuild": "publint",
-		"prepublish": "pnpm build"
+		"prepublish": "pnpm build",
+		"prepack": "cp ../{LICENSE,README.md} .",
+		"postpack": "rm LICENSE README.md"
 	},
 	"files": [
 		"dist"
