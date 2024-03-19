@@ -1,20 +1,22 @@
-import { AsyncLocalStorage } from "node:async_hooks"
 import { resolve } from "node:path"
 
 import { globStream } from "glob"
 import { z } from "zod"
 
 import { shortHash } from "./_shared.js"
+import {
+	InvalidRequestBodyError,
+	UnknownProcedureError,
+} from "./server/errors.js"
+
+export * from "./server/errors.js"
+export * from "./server/state.js"
 
 export type Options = {
 	patterns?: string | string[]
 }
 
 export type Proc = (...args: unknown[]) => Promise<unknown>
-
-export class InvalidRequestBodyError extends Error {}
-export class UnknownProcedureError extends Error {}
-export class ValidationError extends Error {}
 
 export const RequestBodySchema = z.tuple([z.string()]).rest(z.unknown())
 
@@ -55,26 +57,4 @@ export async function createRpc({
 
 		return proc(...args)
 	}
-}
-
-export interface Context {}
-
-const asyncLocalStorage = new AsyncLocalStorage<Context>()
-
-export function createContext(context: Context) {
-	if (asyncLocalStorage.getStore() != null) {
-		throw new Error("Context has already been created.")
-	}
-
-	asyncLocalStorage.enterWith(context)
-}
-
-export function useContext() {
-	const context = asyncLocalStorage.getStore()
-
-	if (context == null) {
-		throw new Error("Context has not been created.")
-	}
-
-	return context
 }

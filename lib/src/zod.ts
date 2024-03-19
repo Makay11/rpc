@@ -5,10 +5,10 @@ import { ValidationError } from "./server.js"
 export * from "zod"
 
 export function zv<Schema extends z.ZodTypeAny>(
-	arg: unknown,
+	value: unknown,
 	schema: Schema,
-): asserts arg is z.infer<Schema> {
-	const result = schema.safeParse(arg)
+): asserts value is z.infer<Schema> {
+	const result = schema.safeParse(value)
 
 	if (!result.success) {
 		throw new ValidationError()

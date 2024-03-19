@@ -4,10 +4,12 @@
 		"@tsconfig/strictest/tsconfig.json"
 	],
 
-	"include": [".eslintrc.cjs", "build.config.ts", "src/**/*.ts"],
+	"include": ["src/**/*.ts"],
 
 	"compilerOptions": {
-		"noEmit": true,
+		"declaration": true,
+		"outDir": "dist",
+
 		"lib": ["DOM"]
 	}
 }

@@ -1,0 +1,20 @@
+{
+	"extends": [
+		"@tsconfig/node20/tsconfig.json",
+		"@tsconfig/strictest/tsconfig.json"
+	],
+	"include": [
+		"vite.config.*",
+		"vitest.config.*",
+		"cypress.config.*",
+		"nightwatch.conf.*",
+		"playwright.config.*"
+	],
+	"compilerOptions": {
+		"noEmit": true,
+
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"types": ["node"]
+	}
+}
