@@ -4,6 +4,30 @@ An RPC library for quick development of seamless full-stack applications.
 
 Powered by a [Vite](https://vitejs.dev/) plugin and inspired by [Telefunc](https://telefunc.com/), [tRPC](https://trpc.io/) and other similar libraries.
 
+---
+
+<center>
+
+[✨&nbsp;Features](#✨-features)
+[🔧&nbsp;Installation&nbsp;and&nbsp;setup](#🔧-installation-and-setup)
+[🚀&nbsp;Usage](#🚀-usage)
+
+[📝&nbsp;Input&nbsp;validation](#📝-input-validation)
+[🚨&nbsp;Errors](#🚨-errors)
+[📦&nbsp;Async&nbsp;server&nbsp;state](#📦-async-server-state)
+[👍&nbsp;Results](#👍-results)
+
+[🔌&nbsp;Adapters](#🔌-adapters)
+[🔥&nbsp;Hono](#🔥-hono)
+[💎&nbsp;Zod](#💎-zod)
+
+[🧑🏻‍💻&nbsp;Contributing](#🧑🏻‍💻-contributing)
+[📄&nbsp;License](#📄-license)
+
+</center>
+
+---
+
 ## ✨ Features:
 
 - End-to-end TypeScript
@@ -134,6 +158,8 @@ export async function createTodo(text: string) {
 
 Serve the above `src/components/Todos.ts` through Vite and you should see the array of todos printed to your browser console. Reload the page a bunch of times and you should see the array grow since the state is persisted in the server!
 
+In a real scenario you would store your data in a database rather than in the server memory, of course. The snippets above are merely illustrative.
+
 ## 📝 Input validation
 
 There is no implicit run-time validation of inputs in the server. In the example above, the function `createTodo` expects a single string argument. However, if your server is exposed publicly, bad actors or misconfigured clients might send something unexpected which can cause undefined behavior in you program.
@@ -156,7 +182,7 @@ export async function createTodo(text: string) {
 }
 ```
 
-When using the [Hono](https://hono.dev/) adapter, the code above will result in a `500 Internal Server Error` when you send an invalid input. In order to return the expected `400 Bad Request` instead, you have a few options:
+When using the [Hono](https://hono.dev/) adapter, for instance, the code above will result in a `500 Internal Server Error` when you send an invalid input. In order to return the expected `400 Bad Request` instead, you have many options depending on the libraries, frameworks, and adapters you are using. Here are a few examples:
 
 1. Catch the [Zod](https://zod.dev/) error and throw a `ValidationError` from `@makay/rpc/server` instead:
 
@@ -207,8 +233,10 @@ When using the [Hono](https://hono.dev/) adapter, the code above will result in 
    const rpc = await createRpc({
    	onUnhandledError(ctx, error) {
    		if (error instanceof ZodError) {
-   			ctx.text(error.message, 400)
+   			return ctx.text(error.message, 400)
    		}
+
+   		throw error
    	},
    })
 
@@ -222,6 +250,10 @@ When using the [Hono](https://hono.dev/) adapter, the code above will result in 
    	console.log(`Server is running on http://localhost:${info.port}`)
    })
    ```
+
+   This allows you to catch any unhandled [Zod](https://zod.dev/) errors and return `400 Bad Request` regardless of which server function threw the error.
+
+You can easily adapt any of the examples above to work with any libraries and frameworks you are using. Remember that `@makay/rpc` is completely agnostic.
 
 ## 🚨 Errors
 
