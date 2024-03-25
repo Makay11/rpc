@@ -30,6 +30,10 @@ export async function createRpc({
 	const rpc = await _createRpc(options)
 
 	return async (ctx) => {
+		// this forces a new async context to be created before
+		// we call `createContext` to avoid context collisions
+		await Promise.resolve()
+
 		createContext(ctx)
 
 		if (onRequest != null) {

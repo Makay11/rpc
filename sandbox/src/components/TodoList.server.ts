@@ -1,4 +1,4 @@
-import { err, ok } from "@makay/rpc/result"
+import { errConst, ok } from "@makay/rpc/result"
 import { z, zv } from "@makay/rpc/zod"
 
 import { type User, useUser } from "../server/useUser"
@@ -19,7 +19,7 @@ export async function createTodo(text: string) {
 	const user = useUser()
 
 	if (user == null) {
-		return err("Unauthorized" as const)
+		return errConst("Unauthorized")
 	}
 
 	const todo: Todo = {
@@ -37,7 +37,7 @@ export async function getTodos() {
 	const user = useUser()
 
 	if (user == null) {
-		return err("Unauthorized" as const)
+		return errConst("Unauthorized")
 	}
 
 	return ok(todos)
