@@ -42,3 +42,14 @@ export async function getTodos() {
 
 	return ok(todos)
 }
+
+const listIdSchema = z.string().uuid()
+
+export async function useCreatedTodoEvents(
+	listId: string,
+	emit: (todo: Todo) => void
+) {
+	zv(listId, listIdSchema)
+
+	return "hi"
+}

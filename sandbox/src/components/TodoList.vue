@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { onMounted, type ShallowRef, shallowRef } from "vue"
 
-import { createTodo, getTodos, type Todo } from "./TodoList.server"
+import {
+	createTodo,
+	getTodos,
+	type Todo,
+	useCreatedTodoEvents,
+} from "./TodoList.server"
 
 const todos: ShallowRef<Todo[]> = shallowRef([])
 
@@ -17,6 +22,10 @@ async function fetchTodos() {
 
 onMounted(async () => {
 	await fetchTodos()
+
+	await useCreatedTodoEvents(crypto.randomUUID(), (todo) => {
+		console.log(todo)
+	})
 })
 
 const newTodo = shallowRef("")

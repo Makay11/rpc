@@ -43,7 +43,9 @@ export async function createRpc({
 		const body: unknown = await ctx.req.json()
 
 		try {
-			return ctx.json(await rpc(body))
+			const result = await rpc(body)
+
+			return ctx.json(result)
 		} catch (error) {
 			if (error instanceof UnauthorizedError) {
 				return ctx.text(error.message, 401)

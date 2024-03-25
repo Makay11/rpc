@@ -1,12 +1,4 @@
-export type Config = {
-	url: string
-	credentials: RequestCredentials
-}
-
-export const config: Config = {
-	url: "/rpc",
-	credentials: "same-origin",
-}
+import { config } from "./config.js"
 
 export function rpc(proc: string) {
 	return async (...args: unknown[]) => {

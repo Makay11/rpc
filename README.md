@@ -102,7 +102,7 @@ Powered by a [Vite](https://vitejs.dev/) plugin and inspired by [Telefunc](https
 
    ```ts
    // src/main.ts
-   import { config } from "@makay/rpc/fetch"
+   import { config } from "@makay/rpc/client"
 
    config.url = "http://localhost:3000/rpc"
    config.credentials = "include"

@@ -30,9 +30,9 @@
 		"dist"
 	],
 	"exports": {
-		"./fetch": {
-			"types": "./dist/fetch.d.ts",
-			"import": "./dist/fetch.js"
+		"./client": {
+			"types": "./dist/client.d.ts",
+			"import": "./dist/client.js"
 		},
 		"./hono": {
 			"types": "./dist/hono.d.ts",
@@ -58,7 +58,6 @@
 	"dependencies": {
 		"glob": "^10.3.10",
 		"hono": "^4.1.1",
-		"itertools": "^2.2.5",
 		"vite": "^5.1.6",
 		"zod": "^3.22.4"
 	},

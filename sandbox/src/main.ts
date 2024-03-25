@@ -1,6 +1,6 @@
 import "./assets/main.css"
 
-import { config } from "@makay/rpc/fetch"
+import { config } from "@makay/rpc/client"
 import { createApp } from "vue"
 
 import App from "./App.vue"
