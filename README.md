@@ -6,25 +6,25 @@ Powered by a [Vite](https://vitejs.dev/) plugin and inspired by [Telefunc](https
 
 ---
 
-<center>
+<div align="center">
 
-[✨&nbsp;Features](#✨-features)
-[🔧&nbsp;Installation&nbsp;and&nbsp;setup](#🔧-installation-and-setup)
-[🚀&nbsp;Usage](#🚀-usage)
+[✨ Features](#-features)
+[🔧 Installation and setup](#-installation-and-setup)
+[🚀 Usage](#-usage)
 
-[📝&nbsp;Input&nbsp;validation](#📝-input-validation)
-[🚨&nbsp;Errors](#🚨-errors)
-[📦&nbsp;Async&nbsp;server&nbsp;state](#📦-async-server-state)
-[👍&nbsp;Results](#👍-results)
+[📝 Input validation](#-input-validation)
+[🚨 Errors](#-errors)
+[📦 Async server state](#-async-server-state)
+[👍 Results](#-results)
 
-[🔌&nbsp;Adapters](#🔌-adapters)
-[🔥&nbsp;Hono](#🔥-hono)
-[💎&nbsp;Zod](#💎-zod)
+[🔌 Adapters](#-adapters)
+[🔥 Hono](#-hono)
+[💎 Zod](#-zod)
 
-[🧑🏻‍💻&nbsp;Contributing](#🧑🏻‍💻-contributing)
-[📄&nbsp;License](#📄-license)
+[🧑🏻‍💻 Contributing](#🧑🏻-contributing)
+[📄 License](#-license)
 
-</center>
+</div>
 
 ---
 

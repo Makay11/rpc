@@ -1,6 +1,6 @@
 {
 	"name": "@makay/rpc",
-	"version": "0.1.3",
+	"version": "0.1.4",
 	"type": "module",
 	"description": "An RPC library for quick development of seamless full-stack applications.",
 	"keywords": [

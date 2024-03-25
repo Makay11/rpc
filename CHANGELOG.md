@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.1.4
+
+### 🧹 Chores:
+
+- Fix README formatting
+
 ## v0.1.3
 
 ### 🧹 Chores:
@@ -20,6 +26,6 @@
 
 ## v0.1.0
 
-### 🧹 Chores:
+### 🚀 Features:
 
 - Initial release
