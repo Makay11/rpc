@@ -44,22 +44,19 @@ export async function createRpc({
 		const body: unknown = await ctx.req.json()
 
 		try {
-			if (body[0].endsWith("Events")) {
-				return streamSSE(ctx, async (stream) => {
-					while (true) {
-						console.log("hi")
-						await stream.writeSSE({
-							data: "hi",
-						})
+			const p = rpc(body)
 
-						await stream.sleep(1000)
-					}
+			if (p instanceof Function) {
+				return streamSSE(ctx, async (stream) => {
+					await p((event) => {
+						stream.writeSSE({
+							data: JSON.stringify(event),
+						})
+					})
 				})
 			}
 
-			const result = await rpc(body)
-
-			return ctx.json(result)
+			return ctx.json(await p)
 		} catch (error) {
 			if (error instanceof UnauthorizedError) {
 				return ctx.text(error.message, 401)

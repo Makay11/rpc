@@ -16,7 +16,15 @@ export type Options = {
 	patterns?: string | string[]
 }
 
-export type Procedure = (...args: unknown[]) => Promise<unknown>
+export type Procedure = BasicProcedure | SseProcedure
+
+export type BasicProcedure = (...args: unknown[]) => Promise<unknown>
+
+export type SseProcedure = (
+	...args: unknown[]
+) => (emit: Emit<unknown>) => Promise<unknown>
+
+export type Emit<Event> = (event: Event) => void
 
 export const RequestBodySchema = z.tuple([z.string()]).rest(z.unknown())
 
@@ -28,11 +36,14 @@ export async function createRpc({
 	for await (const path of globStream(patterns)) {
 		const absolutePath = resolve(process.cwd(), path)
 
-		const module = (await import(absolutePath)) as Record<string, Procedure>
+		const module = (await import(absolutePath)) as Record<
+			string,
+			BasicProcedure
+		>
 
 		for (const _export in module) {
 			const procedureId = `${path}:${_export}`
-			let procedure = module[_export]!
+			let procedure: Procedure = module[_export]!
 
 			if (procedureId.endsWith("Events")) {
 				procedure = sse(procedure)
@@ -62,7 +73,8 @@ export async function createRpc({
 	}
 }
 
-function sse(x: Procedure) {
-	// TODO
-	return x
+function sse(procedure: BasicProcedure): SseProcedure {
+	return (...args: unknown[]) =>
+		(emit) =>
+			procedure(emit, ...args)
 }

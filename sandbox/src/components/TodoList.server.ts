@@ -1,4 +1,5 @@
 import { errConst, ok } from "@makay/rpc/result"
+import type { Emit } from "@makay/rpc/server"
 import { z, zv } from "@makay/rpc/zod"
 
 import { type User, useUser } from "../server/useUser"
@@ -43,6 +44,16 @@ export async function getTodos() {
 	return ok(todos)
 }
 
-export async function useCreatedTodoEvents(emit: (todo: Todo) => void) {
-	return "hi"
+export async function useCreatedTodoEvents(emit: Emit<Todo>) {
+	setInterval(() => {
+		emit({
+			id: crypto.randomUUID(),
+			text: "Todo created",
+			creator: {
+				email: "qI5s7@example.com",
+				name: "Diogo",
+				userAgent: "hono",
+			},
+		})
+	}, 1000)
 }
