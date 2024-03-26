@@ -10,35 +10,28 @@ export const config: Config = {
 	credentials: "same-origin",
 }
 
-export function rpc(proc: string) {
-	return async (...args: unknown[]) => {
-		const res = await fetch(config.url, {
-			method: "POST",
-			credentials: config.credentials,
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify([proc, ...args]),
-		})
+function _fetch(proc: string, args: unknown[]) {
+	return fetch(config.url, {
+		method: "POST",
+		credentials: config.credentials,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify([proc, ...args]),
+	})
+}
 
-		return res.json()
-	}
+export function rpc(proc: string) {
+	return async (...args: unknown[]) => (await _fetch(proc, args)).json()
 }
 
 export type OnEvent = (event: unknown) => void
 
 export function sse(proc: string) {
 	return async (onEvent: OnEvent, ...args: unknown[]) => {
-		const res = await fetch(config.url, {
-			method: "POST",
-			credentials: config.credentials,
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify([proc, ...args]),
-		})
+		const response = await _fetch(proc, args)
 
-		const reader = res
+		const reader = response
 			.body!.pipeThrough(new TextDecoderStream())
 			.pipeThrough(new EventSourceParserStream())
 			.getReader()
