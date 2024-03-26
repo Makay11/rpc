@@ -31,8 +31,8 @@ export function sse(proc: string) {
 	return (onEvent: OnEvent, ...args: unknown[]) => {
 		const promise = _fetch(proc, args)
 
-		promise
-			.then(async (response) => {
+		promise.then(
+			async (response) => {
 				const reader = response
 					.body!.pipeThrough(new TextDecoderStream())
 					.pipeThrough(new EventSourceParserStream())
@@ -48,10 +48,11 @@ export function sse(proc: string) {
 
 					onEvent(event.value.data)
 				}
-			})
-			.catch((error: unknown) => {
+			},
+			(error: unknown) => {
 				console.error(error)
-			})
+			},
+		)
 
 		return promise
 	}
