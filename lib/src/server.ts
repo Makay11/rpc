@@ -32,10 +32,10 @@ export async function createRpc({
 
 		for (const _export in module) {
 			const procedureId = `${path}:${_export}`
-			const procedure = module[_export]!
+			let procedure = module[_export]!
 
 			if (procedureId.endsWith("Events")) {
-				// TODO
+				procedure = sse(procedure)
 			}
 
 			proceduresMap.set(procedureId, procedure)
@@ -60,4 +60,9 @@ export async function createRpc({
 
 		return procedure(...args)
 	}
+}
+
+function sse(x: Procedure) {
+	// TODO
+	return x
 }

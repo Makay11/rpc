@@ -1,4 +1,5 @@
 import type { Context } from "hono"
+import { streamSSE } from "hono/streaming"
 import type { MiddlewareHandler } from "hono/types"
 
 import {
@@ -43,6 +44,19 @@ export async function createRpc({
 		const body: unknown = await ctx.req.json()
 
 		try {
+			if (body[0].endsWith("Events")) {
+				return streamSSE(ctx, async (stream) => {
+					while (true) {
+						console.log("hi")
+						await stream.writeSSE({
+							data: "hi",
+						})
+
+						await stream.sleep(1000)
+					}
+				})
+			}
+
 			const result = await rpc(body)
 
 			return ctx.json(result)

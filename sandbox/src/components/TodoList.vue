@@ -23,7 +23,7 @@ async function fetchTodos() {
 onMounted(async () => {
 	await fetchTodos()
 
-	await useCreatedTodoEvents(crypto.randomUUID(), (todo) => {
+	await useCreatedTodoEvents((todo) => {
 		console.log(todo)
 	})
 })
