@@ -28,23 +28,31 @@ export function rpc(proc: string) {
 export type OnEvent = (event: unknown) => void
 
 export function sse(proc: string) {
-	return async (onEvent: OnEvent, ...args: unknown[]) => {
-		const response = await _fetch(proc, args)
+	return (onEvent: OnEvent, ...args: unknown[]) => {
+		const promise = _fetch(proc, args)
 
-		const reader = response
-			.body!.pipeThrough(new TextDecoderStream())
-			.pipeThrough(new EventSourceParserStream())
-			.getReader()
+		promise
+			.then(async (response) => {
+				const reader = response
+					.body!.pipeThrough(new TextDecoderStream())
+					.pipeThrough(new EventSourceParserStream())
+					.getReader()
 
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, no-constant-condition
-		while (true) {
-			const event = await reader.read()
+				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, no-constant-condition
+				while (true) {
+					const event = await reader.read()
 
-			if (event.done) {
-				break
-			}
+					if (event.done) {
+						break
+					}
 
-			onEvent(event.value.data)
-		}
+					onEvent(event.value.data)
+				}
+			})
+			.catch((error: unknown) => {
+				console.error(error)
+			})
+
+		return promise
 	}
 }
