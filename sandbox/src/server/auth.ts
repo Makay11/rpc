@@ -1,7 +1,7 @@
 import { useContext } from "@makay/rpc/hono"
 import { defineState } from "@makay/rpc/server"
 import { z } from "@makay/rpc/zod"
-import { deleteCookie, getCookie, setCookie } from "hono/cookie"
+import { deleteCookie, getSignedCookie, setSignedCookie } from "hono/cookie"
 
 const UserSchema = z.object({
 	id: z.string().uuid(),
@@ -16,7 +16,9 @@ const {
 	useState: _useUser,
 } = defineState<User>()
 
-export function login(username: string) {
+const secret: string = "43c79fc7-348c-4617-99ca-6167c01e8313"
+
+export async function login(username: string) {
 	const ctx = useContext()
 
 	const user: User = {
@@ -24,11 +26,11 @@ export function login(username: string) {
 		username,
 	}
 
-	setCookie(ctx, "user", JSON.stringify(user), {
+	await setSignedCookie(ctx, "user", JSON.stringify(user), secret, {
 		httpOnly: true,
 	})
 
-	createUser(user)
+	return createUser(user)
 }
 
 export function logout() {
@@ -39,7 +41,7 @@ export function logout() {
 	clearUser()
 }
 
-export function useUser() {
+export async function useUser() {
 	const user = _useUser()
 
 	if (user != null) {
@@ -48,9 +50,9 @@ export function useUser() {
 
 	const ctx = useContext()
 
-	const cookie = getCookie(ctx, "user")
+	const cookie = await getSignedCookie(ctx, secret, "user")
 
-	if (cookie == null) {
+	if (!cookie) {
 		return null
 	}
 
