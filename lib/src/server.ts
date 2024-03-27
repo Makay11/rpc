@@ -16,13 +16,20 @@ export type Options = {
 	patterns?: string | string[]
 }
 
-export type Procedure = BasicProcedure | SseProcedure
+export type RawProcedure = BasicProcedure | RawSseProcedure
 
 export type BasicProcedure = (...args: unknown[]) => Promise<unknown>
 
+export type RawSseProcedure = (
+	emit: Emit<unknown>,
+	...args: unknown[]
+) => Promise<() => void>
+
+export type Procedure = BasicProcedure | SseProcedure
+
 export type SseProcedure = (
 	...args: unknown[]
-) => (emit: Emit<unknown>) => Promise<unknown>
+) => (emit: Emit<unknown>) => Promise<() => void>
 
 export type Emit<Event> = (event: Event) => void
 
@@ -36,17 +43,18 @@ export async function createRpc({
 	for await (const path of globStream(patterns)) {
 		const absolutePath = resolve(process.cwd(), path)
 
-		const module = (await import(absolutePath)) as Record<
-			string,
-			BasicProcedure
-		>
+		const module = (await import(absolutePath)) as Record<string, RawProcedure>
 
 		for (const _export in module) {
 			const procedureId = `${path}:${_export}`
-			let procedure: Procedure = module[_export]!
+			const rawProcedure = module[_export]!
+
+			let procedure
 
 			if (procedureId.endsWith("Events")) {
-				procedure = sse(procedure)
+				procedure = sse(rawProcedure as RawSseProcedure)
+			} else {
+				procedure = rawProcedure as BasicProcedure
 			}
 
 			proceduresMap.set(procedureId, procedure)
@@ -73,7 +81,7 @@ export async function createRpc({
 	}
 }
 
-function sse(procedure: BasicProcedure): SseProcedure {
+function sse(procedure: RawSseProcedure): SseProcedure {
 	return (...args: unknown[]) =>
 		(emit) =>
 			procedure(emit, ...args)

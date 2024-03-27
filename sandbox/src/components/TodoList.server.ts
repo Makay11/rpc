@@ -45,7 +45,7 @@ export async function getTodos() {
 }
 
 export async function useCreatedTodoEvents(emit: Emit<Todo>) {
-	setInterval(() => {
+	const interval = setInterval(() => {
 		emit({
 			id: crypto.randomUUID(),
 			text: "Todo created",
@@ -56,4 +56,8 @@ export async function useCreatedTodoEvents(emit: Emit<Todo>) {
 			},
 		})
 	}, 1000)
+
+	return () => {
+		clearInterval(interval)
+	}
 }
