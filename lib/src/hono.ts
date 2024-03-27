@@ -48,7 +48,7 @@ export async function createRpc({
 
 			if (p instanceof Function) {
 				return streamSSE(ctx, async (stream) => {
-					await p((event) => {
+					const cleanup = await p((event) => {
 						stream
 							.writeSSE({
 								data: JSON.stringify(event),
@@ -57,6 +57,8 @@ export async function createRpc({
 								console.error(error)
 							})
 					})
+
+					stream.onAbort(cleanup)
 				})
 			}
 

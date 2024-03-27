@@ -49,7 +49,7 @@ export async function createRpc({
 			const procedureId = `${path}:${_export}`
 			const rawProcedure = module[_export]!
 
-			let procedure
+			let procedure: Procedure
 
 			if (procedureId.endsWith("Events")) {
 				procedure = sse(rawProcedure as RawSseProcedure)
