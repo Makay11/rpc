@@ -23,9 +23,13 @@ async function fetchTodos() {
 onMounted(async () => {
 	await fetchTodos()
 
-	await useCreatedTodoEvents((todo) => {
+	const close = await useCreatedTodoEvents((todo) => {
 		console.log(todo)
 	})
+
+	setTimeout(() => {
+		close()
+	}, 2500)
 })
 
 const newTodo = shallowRef("")

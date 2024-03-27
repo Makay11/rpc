@@ -25,34 +25,34 @@ export function rpc(proc: string) {
 	return async (...args: unknown[]) => (await _fetch(proc, args)).json()
 }
 
-export type OnEvent = (event: unknown) => void
+export type EventListener = (event: unknown) => void
 
 export function sse(proc: string) {
-	return (onEvent: OnEvent, ...args: unknown[]) => {
-		const promise = _fetch(proc, args)
+	return async (eventListener: EventListener, ...args: unknown[]) => {
+		const response = await _fetch(proc, args)
 
-		promise.then(async (response) => {
-			try {
-				const reader = response
-					.body!.pipeThrough(new TextDecoderStream())
-					.pipeThrough(new EventSourceParserStream())
-					.getReader()
+		const abortController = new AbortController()
 
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, no-constant-condition
-				while (true) {
-					const event = await reader.read()
-
-					if (event.done) {
-						break
-					}
-
-					onEvent(event.value.data)
+		response
+			.body!.pipeThrough(new TextDecoderStream())
+			.pipeThrough(new EventSourceParserStream())
+			.pipeTo(
+				new WritableStream({
+					write: eventListener,
+				}),
+				{
+					signal: abortController.signal,
+				},
+			)
+			.catch((error: unknown) => {
+				if (error instanceof DOMException && error.name === "AbortError") {
+					return
 				}
-			} catch (error) {
 				console.error(error)
-			}
-		}, console.error)
+			})
 
-		return promise
+		return () => {
+			abortController.abort()
+		}
 	}
 }
