@@ -12,6 +12,7 @@
 	"dependencies": {
 		"@hono/node-server": "^1.9.0",
 		"@makay/rpc": "link:../lib",
+		"@vueuse/core": "^10.9.0",
 		"hono": "^4.1.4",
 		"tsx": "^4.7.1",
 		"vue": "^3.4.21"

@@ -13,6 +13,16 @@ export function defineState<State extends NonNullable<unknown>>() {
 		return state
 	}
 
+	function clearState() {
+		asyncLocalStorage.enterWith(undefined as unknown as State)
+	}
+
+	function replaceState(state: State) {
+		asyncLocalStorage.enterWith(state)
+
+		return state
+	}
+
 	function useState() {
 		return asyncLocalStorage.getStore()
 	}
@@ -29,6 +39,8 @@ export function defineState<State extends NonNullable<unknown>>() {
 
 	return {
 		createState,
+		clearState,
+		replaceState,
 		useState,
 		useStateOrThrow,
 	}
