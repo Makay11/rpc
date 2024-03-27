@@ -1,24 +1,41 @@
 <script setup lang="ts">
-import { asyncComputed } from "@vueuse/core"
-import { watchEffect } from "vue"
+import { useAsyncState } from "@vueuse/core"
+import { ref } from "vue"
 
-import { getUser } from "./OnlineChat.server"
+import { getUser, login as _login } from "./OnlineChat.server"
 
-const user = asyncComputed(getUser, null)
+const { isLoading: isLoadingUser, state: user } = useAsyncState(getUser, null)
 
-watchEffect(() => {
-	console.log(user.value)
-})
+const username = ref("")
+
+async function login() {
+	user.value = await _login(username.value)
+}
 </script>
 
 <template>
-	<form></form>
+	<div v-if="isLoadingUser">Loading...</div>
+
+	<form
+		v-else-if="user == null"
+		@submit.prevent="login()"
+	>
+		<input
+			v-model="username"
+			type="text"
+			placeholder="Username"
+		/>
+
+		<button type="submit">Login</button>
+	</form>
+
+	<div v-else>{{ user }}</div>
 
 	<!-- <ul>
-		<li
+			<li
 			v-for="todo in todos"
 			:key="todo.id"
-		>
+			>
 			{{ todo.text }}
 		</li>
 	</ul>
@@ -28,8 +45,8 @@ watchEffect(() => {
 			New Todo
 
 			<input
-				v-model="newTodo"
-				type="text"
+			v-model="newTodo"
+			type="text"
 			/>
 
 			<button type="submit">Add</button>

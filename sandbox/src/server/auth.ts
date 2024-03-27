@@ -3,7 +3,7 @@ import { defineState } from "@makay/rpc/server"
 import { z } from "@makay/rpc/zod"
 import { deleteCookie, getSignedCookie, setSignedCookie } from "hono/cookie"
 
-const UserSchema = z.object({
+export const UserSchema = z.object({
 	id: z.string().uuid(),
 	username: z.string().min(1).max(32),
 })
@@ -28,6 +28,7 @@ export async function login(username: string) {
 
 	await setSignedCookie(ctx, "user", JSON.stringify(user), secret, {
 		httpOnly: true,
+		sameSite: "Strict",
 	})
 
 	return createUser(user)
