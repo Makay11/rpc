@@ -1,4 +1,15 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { asyncComputed } from "@vueuse/core"
+import { watchEffect } from "vue"
+
+import { getUser } from "./OnlineChat.server"
+
+const user = asyncComputed(getUser, null)
+
+watchEffect(() => {
+	console.log(user.value)
+})
+</script>
 
 <template>
 	<form></form>
