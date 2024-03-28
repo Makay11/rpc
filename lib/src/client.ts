@@ -38,7 +38,9 @@ export function sse(proc: string) {
 			.pipeThrough(new EventSourceParserStream())
 			.pipeTo(
 				new WritableStream({
-					write: eventListener,
+					write(event) {
+						eventListener(JSON.parse(event.data))
+					},
 				}),
 				{
 					signal: abortController.signal,

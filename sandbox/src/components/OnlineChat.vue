@@ -8,6 +8,7 @@ import {
 	getUser,
 	login as _login,
 	logout as _logout,
+	useMessageCreatedEvents,
 } from "./OnlineChat.server"
 
 const { isLoading: isLoadingUser, state: user } = useAsyncState(getUser, null)
@@ -32,9 +33,22 @@ const {
 	shallow: false,
 })
 
+let unsubscribe: (() => void) | null = null
+
 whenever(
 	() => user.value != null,
-	() => fetchMessages()
+	async () => {
+		if (unsubscribe != null) {
+			unsubscribe()
+			unsubscribe = null
+		}
+
+		await fetchMessages()
+
+		unsubscribe = await useMessageCreatedEvents((message) => {
+			messages.value.push(message)
+		})
+	}
 )
 
 const newMessageText = ref("")
@@ -42,7 +56,7 @@ const newMessageText = ref("")
 async function sendMessage() {
 	if (newMessageText.value === "") return
 
-	messages.value.push(await createMessage(newMessageText.value))
+	await createMessage(newMessageText.value)
 
 	newMessageText.value = ""
 }

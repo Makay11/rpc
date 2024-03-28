@@ -1,3 +1,6 @@
+import EventEmitter from "node:events"
+
+import { type Emit, UnauthorizedError } from "@makay/rpc/server"
 import { z, zv } from "@makay/rpc/zod"
 
 import {
@@ -40,6 +43,10 @@ export async function getMessages() {
 	return messages
 }
 
+const ee = new EventEmitter<{
+	MESSAGE_CREATED: [message: Message]
+}>()
+
 const MessageTextSchema = z.string().min(1).max(256)
 
 export async function createMessage(text: string) {
@@ -55,5 +62,17 @@ export async function createMessage(text: string) {
 
 	messages.push(message)
 
+	ee.emit("MESSAGE_CREATED", message)
+
 	return message
+}
+
+export async function useMessageCreatedEvents(emit: Emit<Message>) {
+	await useUserOrThrow()
+
+	ee.on("MESSAGE_CREATED", emit)
+
+	return () => {
+		ee.off("MESSAGE_CREATED", emit)
+	}
 }
