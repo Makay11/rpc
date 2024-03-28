@@ -1,4 +1,3 @@
-import { UnauthorizedError } from "@makay/rpc/server"
 import { z, zv } from "@makay/rpc/zod"
 
 import {
@@ -6,6 +5,7 @@ import {
 	logout as _logout,
 	UserSchema,
 	useUser,
+	useUserOrThrow,
 } from "../server/auth"
 
 export async function getUser() {
@@ -35,11 +35,7 @@ export type Message = {
 const messages: Message[] = []
 
 export async function getMessages() {
-	const user = await getUser()
-
-	if (user == null) {
-		throw new UnauthorizedError()
-	}
+	await useUserOrThrow()
 
 	return messages
 }
@@ -49,11 +45,7 @@ const MessageTextSchema = z.string().min(1).max(256)
 export async function createMessage(text: string) {
 	zv(text, MessageTextSchema)
 
-	const user = await getUser()
-
-	if (user == null) {
-		throw new UnauthorizedError()
-	}
+	const user = await useUserOrThrow()
 
 	const message: Message = {
 		id: crypto.randomUUID(),

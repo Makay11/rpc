@@ -1,5 +1,5 @@
 import { useContext } from "@makay/rpc/hono"
-import { defineState } from "@makay/rpc/server"
+import { defineState, UnauthorizedError } from "@makay/rpc/server"
 import { z } from "@makay/rpc/zod"
 import { deleteCookie, getSignedCookie, setSignedCookie } from "hono/cookie"
 
@@ -65,4 +65,14 @@ export async function useUser() {
 	} catch {
 		return null
 	}
+}
+
+export async function useUserOrThrow() {
+	const user = await useUser()
+
+	if (user == null) {
+		throw new UnauthorizedError()
+	}
+
+	return user
 }
