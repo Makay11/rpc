@@ -16,7 +16,8 @@ const {
 	useState: _useUser,
 } = defineState<User>()
 
-const secret: string = "43c79fc7-348c-4617-99ca-6167c01e8313"
+// not a real secret
+const SECRET: string = "43c79fc7-348c-4617-99ca-6167c01e8313"
 
 export async function login(username: string) {
 	const ctx = useContext()
@@ -26,7 +27,7 @@ export async function login(username: string) {
 		username,
 	}
 
-	await setSignedCookie(ctx, "user", JSON.stringify(user), secret, {
+	await setSignedCookie(ctx, "user", JSON.stringify(user), SECRET, {
 		httpOnly: true,
 		sameSite: "Strict",
 	})
@@ -51,7 +52,7 @@ export async function useUser() {
 
 	const ctx = useContext()
 
-	const cookie = await getSignedCookie(ctx, secret, "user")
+	const cookie = await getSignedCookie(ctx, SECRET, "user")
 
 	if (!cookie) {
 		return null

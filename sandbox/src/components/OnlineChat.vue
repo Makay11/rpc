@@ -1,8 +1,14 @@
 <script setup lang="ts">
-import { useAsyncState } from "@vueuse/core"
+import { useAsyncState, whenever } from "@vueuse/core"
 import { ref } from "vue"
 
-import { getUser, login as _login } from "./OnlineChat.server"
+import {
+	createMessage,
+	getMessages,
+	getUser,
+	login as _login,
+	logout as _logout,
+} from "./OnlineChat.server"
 
 const { isLoading: isLoadingUser, state: user } = useAsyncState(getUser, null)
 
@@ -10,6 +16,35 @@ const username = ref("")
 
 async function login() {
 	user.value = await _login(username.value)
+}
+
+async function logout() {
+	await _logout()
+	user.value = null
+}
+
+const {
+	isLoading: isLoadingMessages,
+	state: messages,
+	execute: fetchMessages,
+} = useAsyncState(getMessages, [], {
+	immediate: false,
+	shallow: false,
+})
+
+whenever(
+	() => user.value != null,
+	() => fetchMessages()
+)
+
+const newMessageText = ref("")
+
+async function sendMessage() {
+	if (newMessageText.value === "") return
+
+	messages.value.push(await createMessage(newMessageText.value))
+
+	newMessageText.value = ""
 }
 </script>
 
@@ -20,36 +55,47 @@ async function login() {
 		v-else-if="user == null"
 		@submit.prevent="login()"
 	>
-		<input
-			v-model="username"
-			type="text"
-			placeholder="Username"
-		/>
+		<label>
+			Username
+
+			<input
+				v-model="username"
+				type="text"
+			/>
+		</label>
 
 		<button type="submit">Login</button>
 	</form>
 
-	<div v-else>{{ user }}</div>
+	<template v-else>
+		<div>Logged in as "{{ user.username }}" with id "{{ user.id }}"</div>
 
-	<!-- <ul>
-			<li
-			v-for="todo in todos"
-			:key="todo.id"
-			>
-			{{ todo.text }}
-		</li>
-	</ul>
+		<button @click="logout()">Logout</button>
 
-	<form @submit.prevent="addTodo()">
-		<label>
-			New Todo
+		<div v-if="isLoadingMessages">Loading messages...</div>
 
-			<input
-			v-model="newTodo"
-			type="text"
-			/>
+		<template v-else>
+			<ul>
+				<li
+					v-for="message in messages"
+					:key="message.id"
+				>
+					{{ message.text }}
+				</li>
+			</ul>
 
-			<button type="submit">Add</button>
-		</label>
-	</form> -->
+			<form @submit.prevent="sendMessage()">
+				<label>
+					New message
+
+					<input
+						v-model="newMessageText"
+						type="text"
+					/>
+
+					<button type="submit">Send</button>
+				</label>
+			</form>
+		</template>
+	</template>
 </template>
