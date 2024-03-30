@@ -1,6 +1,8 @@
 import type { Context } from "hono"
+import { streamSSE } from "hono/streaming"
 import type { MiddlewareHandler } from "hono/types"
 
+import { Observable } from "./observable.js"
 import {
 	createRpc as _createRpc,
 	defineState,
@@ -43,7 +45,30 @@ export async function createRpc({
 		const body: unknown = await ctx.req.json()
 
 		try {
-			return ctx.json(await rpc(body))
+			const result = await rpc(body)
+
+			if (result instanceof Observable) {
+				return streamSSE(ctx, async (stream) => {
+					await stream.writeSSE({
+						event: "open",
+						data: "",
+					})
+
+					const unsubscribe = result.subscribe((event: unknown) => {
+						stream
+							.writeSSE({
+								data: JSON.stringify(event),
+							})
+							.catch((error: unknown) => {
+								console.error(error)
+							})
+					})
+
+					stream.onAbort(unsubscribe)
+				})
+			}
+
+			return ctx.json(result)
 		} catch (error) {
 			if (error instanceof UnauthorizedError) {
 				return ctx.text(error.message, 401)

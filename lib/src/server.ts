@@ -16,27 +16,26 @@ export type Options = {
 	patterns?: string | string[]
 }
 
-export type Proc = (...args: unknown[]) => Promise<unknown>
+export type Procedure = (...args: unknown[]) => Promise<unknown>
 
 export const RequestBodySchema = z.tuple([z.string()]).rest(z.unknown())
 
 export async function createRpc({
 	patterns = "src/**/*.server.ts",
 }: Options = {}) {
-	const procMap = new Map<string, Proc>()
+	const proceduresMap = new Map<string, Procedure>()
 
-	const paths = globStream(patterns)
-
-	for await (const path of paths) {
+	for await (const path of globStream(patterns)) {
 		const absolutePath = resolve(process.cwd(), path)
 
-		const module = (await import(absolutePath)) as Record<string, Proc>
+		const module = (await import(absolutePath)) as Record<string, Procedure>
 
 		for (const _export in module) {
-			const procName = `${path}:${_export}`
+			const procedureId = `${path}:${_export}`
+			const procedure = module[_export]!
 
-			procMap.set(procName, module[_export]!)
-			procMap.set(shortHash(procName), module[_export]!)
+			proceduresMap.set(procedureId, procedure)
+			proceduresMap.set(shortHash(procedureId), procedure)
 		}
 	}
 
@@ -47,14 +46,14 @@ export async function createRpc({
 			throw new InvalidRequestBodyError()
 		}
 
-		const [procName, ...args] = bodyResult.data
+		const [procedureId, ...args] = bodyResult.data
 
-		const proc = procMap.get(procName)
+		const procedure = proceduresMap.get(procedureId)
 
-		if (proc == null) {
+		if (procedure == null) {
 			throw new UnknownProcedureError()
 		}
 
-		return proc(...args)
+		return procedure(...args)
 	}
 }

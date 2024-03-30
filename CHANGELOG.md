@@ -1,28 +1,49 @@
 # Changelog
 
+## v0.3.0 (2024-03-30)
+
+### 🔨 Breaking changes
+
+- Rename `@makay/rpc/fetch` to `@makay/rpc/client`
+
+### 🚀 Features
+
+- Add `@makay/rpc/observable`
+
+- Add SSE support
+
+- @makay/rpc/server
+
+  - Add `clearState` and `replaceState` functions to async server state
+
+### 🧹 Chores
+
+- Emit TypeScript declaration maps
+- Use 2 spaces indentation in Markdown files
+
 ## v0.2.0 (2024-03-25)
 
 ### 🚀 Features
 
-#### @makay/rpc/result
+- @makay/rpc/result
 
-- Add `okConst` and `errConst` utility functions
+  - Add `okConst` and `errConst` utility functions
 
-  ```ts
-  import { err, errConst } from "@makay/rpc/result"
+    ```ts
+    import { err, errConst } from "@makay/rpc/result"
 
-  err("USER_NOT_FOUND") // => Err<string>
+    err("USER_NOT_FOUND") // => Err<string>
 
-  // these two are equivalent
-  err("USER_NOT_FOUND" as const) // => Err<"USER_NOT_FOUND">
-  errConst("USER_NOT_FOUND") // => Err<"USER_NOT_FOUND">
-  ```
+    // these two are equivalent
+    err("USER_NOT_FOUND" as const) // => Err<"USER_NOT_FOUND">
+    errConst("USER_NOT_FOUND") // => Err<"USER_NOT_FOUND">
+    ```
 
 ### 🩹 Fixes
 
-#### @makay/rpc/hono
+- @makay/rpc/hono
 
-- Prevent context collisions between requests
+  - Prevent context collisions between requests
 
 ## v0.1.4 (2024-03-25)
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import TodoList from "./components/TodoList.vue"
+import OnlineChat from "./components/OnlineChat.vue"
 </script>
 
 <template>
-	<TodoList />
+	<OnlineChat />
 </template>

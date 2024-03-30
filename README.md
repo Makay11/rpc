@@ -66,7 +66,7 @@ Powered by a [Vite](https://vitejs.dev/) plugin and inspired by [Telefunc](https
    import { defineConfig } from "vite"
 
    export default defineConfig({
-   	plugins: [rpc()],
+     plugins: [rpc()],
    })
    ```
 
@@ -84,13 +84,13 @@ Powered by a [Vite](https://vitejs.dev/) plugin and inspired by [Telefunc](https
    const app = new Hono()
 
    app.use(
-   	"/rpc",
-   	cors({ origin: "http://localhost:5173", credentials: true }),
-   	await createRpc()
+     "/rpc",
+     cors({ origin: "http://localhost:5173", credentials: true }),
+     await createRpc()
    )
 
    serve(app, (info) => {
-   	console.log(`Server is running on http://localhost:${info.port}`)
+     console.log(`Server is running on http://localhost:${info.port}`)
    })
    ```
 
@@ -102,7 +102,7 @@ Powered by a [Vite](https://vitejs.dev/) plugin and inspired by [Telefunc](https
 
    ```ts
    // src/main.ts
-   import { config } from "@makay/rpc/fetch"
+   import { config } from "@makay/rpc/client"
 
    config.url = "http://localhost:3000/rpc"
    config.credentials = "include"
@@ -119,13 +119,13 @@ import { createTodo, getTodos, type Todo } from "./Todos.server"
 let todos: Todo[] = []
 
 async function main() {
-	todos = await getTodos()
+  todos = await getTodos()
 
-	console.log(todos)
+  console.log(todos)
 
-	const newTodo = await createTodo("New Todo")
+  const newTodo = await createTodo("New Todo")
 
-	console.log(newTodo)
+  console.log(newTodo)
 }
 
 main()
@@ -134,25 +134,25 @@ main()
 ```ts
 // src/components/Todos.server.ts
 export type Todo = {
-	id: string
-	text: string
+  id: string
+  text: string
 }
 
 const todos: Todo[] = []
 
 export async function getTodos() {
-	return todos
+  return todos
 }
 
 export async function createTodo(text: string) {
-	const todo = {
-		id: crypto.randomUUID(),
-		text,
-	}
+  const todo = {
+    id: crypto.randomUUID(),
+    text,
+  }
 
-	todos.push(todo)
+  todos.push(todo)
 
-	return todo
+  return todo
 }
 ```
 
@@ -175,10 +175,10 @@ import { z } from "zod"
 const TextSchema = z.string().min(1).max(256)
 
 export async function createTodo(text: string) {
-	TextSchema.parse(text)
+  TextSchema.parse(text)
 
-	// `text` is now safe to use since Zod would have
-	// thrown an error if it was invalid
+  // `text` is now safe to use since Zod would have
+  // thrown an error if it was invalid
 }
 ```
 
@@ -211,9 +211,9 @@ When using the [Hono](https://hono.dev/) adapter, for instance, the code above w
    const TextSchema = z.string().min(1).max(256)
 
    export async function createTodo(text: string) {
-   	zv(text, TextSchema)
+     zv(text, TextSchema)
 
-   	// `text` is now safe to use
+     // `text` is now safe to use
    }
    ```
 
@@ -231,23 +231,23 @@ When using the [Hono](https://hono.dev/) adapter, for instance, the code above w
    const app = new Hono()
 
    const rpc = await createRpc({
-   	onUnhandledError(ctx, error) {
-   		if (error instanceof ZodError) {
-   			return ctx.text(error.message, 400)
-   		}
+     onUnhandledError(ctx, error) {
+       if (error instanceof ZodError) {
+         return ctx.text(error.message, 400)
+       }
 
-   		throw error
-   	},
+       throw error
+     },
    })
 
    app.use(
-   	"/rpc",
-   	cors({ origin: "http://localhost:5173", credentials: true }),
-   	rpc
+     "/rpc",
+     cors({ origin: "http://localhost:5173", credentials: true }),
+     rpc
    )
 
    serve(app, (info) => {
-   	console.log(`Server is running on http://localhost:${info.port}`)
+     console.log(`Server is running on http://localhost:${info.port}`)
    })
    ```
 
