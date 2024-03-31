@@ -16,6 +16,7 @@ Powered by a [Vite](https://vitejs.dev/) plugin and inspired by [Telefunc](https
 [🚨 Errors](#-errors)
 [📦 Async server state](#-async-server-state)
 [👍 Results](#-results)
+[📡 Subscriptions](#-subscriptions)
 
 [🔌 Adapters](#-adapters)
 [🔥 Hono](#-hono)
@@ -30,17 +31,18 @@ Powered by a [Vite](https://vitejs.dev/) plugin and inspired by [Telefunc](https
 
 ## ✨ Features:
 
-- End-to-end TypeScript
-- Zero boilerplate
-- Directly import and call tailored server functions from client code
-- Colocate server and client files (or don't)
-- Front-end and back-end framework agnostic
-- Use the [composables](https://vuejs.org/guide/reusability/composables)/[hooks](https://react.dev/reference/react/hooks) pattern in server code
-- Extremely small client bundle size addition
-- Low server overhead with no implicit run-time validations
-- Validation library agnostic
-- Includes adapters for popular libraries like [Hono](https://hono.dev/) and [Zod](https://zod.dev/)
-- Includes utilities for [results](https://github.com/Makay11/rpc/blob/main/lib/src/result.ts) and [async server state](https://github.com/Makay11/rpc/blob/main/lib/src/server/state.ts)
+- 🎉 End-to-end TypeScript
+- 🚫 Zero boilerplate
+- 📡 Optional [server-sent events](https://en.wikipedia.org/wiki/Server-sent_events) support for real-time [subscriptions](#-subscriptions)
+- 🪶 Extremely small client bundle size addition
+- 🔗 Directly import and call tailored server functions from client code
+- 📄 Colocate server and client files (or don't)
+- 📦 Front-end and back-end framework agnostic
+- 📦 Validation library agnostic
+- 🚫 Low server overhead with no implicit run-time validations
+- 🪝 Use the [composables](https://vuejs.org/guide/reusability/composables)/[hooks](https://react.dev/reference/react/hooks) pattern in server code
+- 🔌 Includes adapters for popular libraries like [Hono](https://hono.dev/) and [Zod](https://zod.dev/)
+- 🧰 Includes utilities for [async server state](https://github.com/Makay11/rpc/blob/main/lib/src/server/state.ts) and [results](https://github.com/Makay11/rpc/blob/main/lib/src/result.ts)
 
 ## 🔧 Installation and setup
 
@@ -192,13 +194,14 @@ When using the [Hono](https://hono.dev/) adapter, for instance, the code above w
    const TextSchema = z.string().min(1).max(256)
 
    export async function createTodo(text: string) {
-   	try {
-   		TextSchema.parse(text)
-   	} catch {
-   		throw new ValidationError()
-   	}
+     try {
+       TextSchema.parse(text)
+     } catch {
+       throw new ValidationError()
+     }
 
-   	// `text` is now safe to use
+     // `text` is now safe to use
+   }
    ```
 
    This is of course a bit too verbose to be practical.
@@ -264,6 +267,10 @@ WIP
 WIP
 
 ## 👍 Results
+
+WIP
+
+## 📡 Subscriptions
 
 WIP
 

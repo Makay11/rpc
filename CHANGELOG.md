@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.1 (2024-04-31)
+
+### 🏡 Chores
+
+- Update README
+
 ## v0.3.0 (2024-03-30)
 
 ### 🔨 Breaking changes
@@ -16,7 +22,7 @@
 
   - Add `clearState` and `replaceState` functions to async server state
 
-### 🧹 Chores
+### 🏡 Chores
 
 - Emit TypeScript declaration maps
 - Use 2 spaces indentation in Markdown files
@@ -47,25 +53,25 @@
 
 ## v0.1.4 (2024-03-25)
 
-### 🧹 Chores
+### 🏡 Chores
 
 - Fix README formatting
 
 ## v0.1.3 (2024-03-20)
 
-### 🧹 Chores
+### 🏡 Chores
 
 - Update README
 
 ## v0.1.2 (2024-03-20)
 
-### 🧹 Chores
+### 🏡 Chores
 
 - Update README
 
 ## v0.1.1 (2024-03-19)
 
-### 🧹 Chores
+### 🏡 Chores
 
 - Include LICENSE and README.md
 
