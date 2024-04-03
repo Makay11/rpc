@@ -50,11 +50,17 @@ Powered by a [Vite](https://vitejs.dev/) plugin and inspired by [Telefunc](https
 
    ```sh
    npm i @makay/rpc
-   # or
+   ```
+
+   ```sh
    yarn add @makay/rpc
-   # or
+   ```
+
+   ```sh
    pnpm add @makay/rpc
-   # or
+   ```
+
+   ```sh
    bun add @makay/rpc
    ```
 
@@ -196,8 +202,11 @@ When using the [Hono](https://hono.dev/) adapter, for instance, the code above w
    export async function createTodo(text: string) {
      try {
        TextSchema.parse(text)
-     } catch {
-       throw new ValidationError()
+     } catch (error) {
+       if (error instanceof ZodError) {
+         throw new ValidationError(error.error.format())
+       }
+       throw error
      }
 
      // `text` is now safe to use
@@ -222,7 +231,7 @@ When using the [Hono](https://hono.dev/) adapter, for instance, the code above w
 
    This is much less verbose than the previous option.
 
-3. Use the `onUnhandledError` callback of the [Hono](https://hono.dev/) adapter:
+3. Use the `onError` callback of the [Hono](https://hono.dev/) adapter:
 
    ```ts
    import { serve } from "@hono/node-server"
@@ -234,11 +243,10 @@ When using the [Hono](https://hono.dev/) adapter, for instance, the code above w
    const app = new Hono()
 
    const rpc = await createRpc({
-     onUnhandledError(ctx, error) {
+     onError(ctx, error) {
        if (error instanceof ZodError) {
-         return ctx.text(error.message, 400)
+         return ctx.json(error.error.format(), 400)
        }
-
        throw error
      },
    })

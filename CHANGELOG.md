@@ -1,5 +1,35 @@
 # Changelog
 
+## v0.4.0 (2024-04-03)
+
+### 🔨 Breaking changes
+
+- @makay/rpc/hono
+
+  - Remove `onUnhandledError` callback
+
+### 🚀 Features
+
+- @makay/rpc/hono
+
+  - Add `onError` callback
+
+    If defined, `onError` is called before any other error handling code to allow developers to have full control over error handling. Errors thrown in this callback will be propagated and handled as normal.
+
+- @makay/rpc/server
+
+  - `ValidationError` now accepts an optional `JSONValue` to be sent to the client detailing the validation error
+
+- @makay/rpc/zod
+
+  - `zv` now passes the formatted Zod error to the `ValidationError` thrown
+
+### 🩹 Fixes
+
+- @makay/rpc/client
+
+  - Unsuccessful requests now throw `RpcClientError`
+
 ## v0.3.1 (2024-03-31)
 
 ### 🏡 Chores

@@ -11,6 +11,6 @@ export function zv<Schema extends z.ZodTypeAny>(
 	const result = schema.safeParse(value)
 
 	if (!result.success) {
-		throw new ValidationError()
+		throw new ValidationError(result.error.format())
 	}
 }

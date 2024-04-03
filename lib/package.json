@@ -1,10 +1,15 @@
 {
 	"name": "@makay/rpc",
-	"version": "0.3.1",
+	"version": "0.4.0",
 	"type": "module",
 	"description": "An RPC library for quick development of seamless full-stack applications.",
 	"keywords": [
-		"RPC"
+		"typescript",
+		"rpc",
+		"sse",
+		"server-sent-events",
+		"real-time",
+		"subscriptions"
 	],
 	"license": "MPL-2.0",
 	"author": "Diogo Pais",

@@ -47,10 +47,11 @@ const ee = new EventEmitter<{
 	MESSAGE_CREATED: [message: Message]
 }>()
 
-const MessageTextSchema = z.string().min(1).max(256)
+const TextSchema = z.string().min(1).max(256)
+type Text = z.infer<typeof TextSchema>
 
-export async function createMessage(text: string) {
-	zv(text, MessageTextSchema)
+export async function createMessage(text: Text) {
+	zv(text, TextSchema)
 
 	const user = await useUserOrThrow()
 

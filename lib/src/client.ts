@@ -14,6 +14,16 @@ export const config: Config = {
 	credentials: "same-origin",
 }
 
+export class RpcClientError extends Error {
+	response: Response
+
+	constructor(response: Response) {
+		super(response.statusText)
+
+		this.response = response
+	}
+}
+
 export function rpc(proc: string) {
 	return async (...args: unknown[]) => {
 		const response = await fetch(config.url, {
@@ -24,6 +34,10 @@ export function rpc(proc: string) {
 			},
 			body: JSON.stringify([proc, ...args]),
 		})
+
+		if (!response.ok) {
+			throw new RpcClientError(response)
+		}
 
 		if (response.headers.get("Content-Type") === "text/event-stream") {
 			if (!__MAKAY_RPC_SSE__) {

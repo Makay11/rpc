@@ -1,4 +1,10 @@
-export class RpcError extends Error {}
+import { JSONValue } from "hono/utils/types"
+
+export class RpcError extends Error {
+	toJSON(): JSONValue {
+		return this.message
+	}
+}
 
 export class InvalidRequestBodyError extends RpcError {
 	constructor() {
@@ -13,8 +19,16 @@ export class UnknownProcedureError extends RpcError {
 }
 
 export class ValidationError extends RpcError {
-	constructor() {
+	error: JSONValue
+
+	constructor(error?: JSONValue) {
 		super("Validation error")
+
+		this.error = error
+	}
+
+	override toJSON() {
+		return this.error ?? super.toJSON()
 	}
 }
 

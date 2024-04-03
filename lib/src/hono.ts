@@ -8,15 +8,15 @@ import {
 	defineState,
 	ForbiddenError,
 	type Options as RpcOptions,
-	RpcError,
 	UnauthorizedError,
+	ValidationError,
 } from "./server.js"
 
 export type MaybePromise<T> = T | Promise<T>
 
 export type Options = RpcOptions & {
 	onRequest?: (ctx: Context) => MaybePromise<void>
-	onUnhandledError?: (ctx: Context, error: unknown) => MaybePromise<void>
+	onError?: (ctx: Context, error: unknown) => MaybePromise<Response>
 }
 
 const { createState: createContext, useStateOrThrow: useContext } =
@@ -26,7 +26,7 @@ export { useContext }
 
 export async function createRpc({
 	onRequest,
-	onUnhandledError,
+	onError,
 	...options
 }: Options = {}): Promise<MiddlewareHandler> {
 	const rpc = await _createRpc(options)
@@ -70,20 +70,21 @@ export async function createRpc({
 
 			return ctx.json(result)
 		} catch (error) {
+			if (onError != null) {
+				return await onError(ctx, error)
+			}
+
+			if (error instanceof ValidationError) {
+				// cast to unknown to avoid TS error "Type instantiation is excessively deep and possibly infinite."
+				return ctx.json(error as unknown, 400)
+			}
+
 			if (error instanceof UnauthorizedError) {
-				return ctx.text(error.message, 401)
+				return ctx.json(error, 401)
 			}
 
 			if (error instanceof ForbiddenError) {
-				return ctx.text(error.message, 403)
-			}
-
-			if (error instanceof RpcError) {
-				return ctx.text(error.message, 400)
-			}
-
-			if (onUnhandledError != null) {
-				return onUnhandledError(ctx, error)
+				return ctx.json(error, 403)
 			}
 
 			throw error
