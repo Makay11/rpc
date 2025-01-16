@@ -4,6 +4,9 @@ An RPC library for quick development of seamless full-stack applications.
 
 Powered by a [Vite](https://vitejs.dev/) plugin and inspired by [Telefunc](https://telefunc.com/), [tRPC](https://trpc.io/) and other similar libraries.
 
+> [!CAUTION]
+> This project has been renamed to [SeamlessRPC](https://github.com/Makay11/seamlessrpc) and is no longer maintained here.
+
 ---
 
 <div align="center">
@@ -22,7 +25,7 @@ Powered by a [Vite](https://vitejs.dev/) plugin and inspired by [Telefunc](https
 [🔥 Hono](#-hono)
 [💎 Zod](#-zod)
 
-[🧑🏻‍💻 Contributing](#🧑🏻-contributing)
+[🧑🏻‍💻 Contributing](#-contributing)
 [📄 License](#-license)
 
 </div>
