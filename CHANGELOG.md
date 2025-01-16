@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.1 (2025-01-16)
+
+### 🏡 Chores
+
+- Update README to alert about the rename to [SeamlessRPC](https://github.com/Makay11/SeamlessRPC)
+
 ## v0.4.0 (2024-04-03)
 
 ### 🔨 Breaking changes
